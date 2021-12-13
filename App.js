@@ -42,23 +42,23 @@ export default function App() {
 
   setStringValue = async () => {
     try {
-      //const blablabla
-      await AsyncStorage.setItem('Accelerometer', value)
+      this.setState({ token: 'abc123' })
+      await AsyncStorage.setItem('token', abc123);
     } catch(e) {
       setErrorMsg(`Storage Error`);
     }
     console.log('Done.')
   }
-//
-  //getMyStringValue = async () => {
-  //  try {
-  //    return await AsyncStorage.getItem('@key')
-  //  } catch(e) {
-  //    setErrorMsg(`Stored Error`);
-  //  }
-  //  console.log('Done.')
-  //}
-//
+
+  getMyStringValue = async () => {
+    try {
+      return await AsyncStorage.getItem('token')
+    } catch(e) {
+      setErrorMsg(`Stored Error`);
+    }
+    console.log('Done.')
+  }
+
   //multiSet = async () => {
   //  const firstPair = ["Accelerometer", "value_1"]
   //  const secondPair = ["Gyroscope", "value_2"]
