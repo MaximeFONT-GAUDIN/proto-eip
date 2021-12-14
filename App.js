@@ -7,6 +7,7 @@ import { Accelerometer, Gyroscope  } from 'expo-sensors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function App() {
+  const [_value, setValue] = useState();
   const [data, setData] = useState({
     x: 0,
     y: 0,
@@ -40,35 +41,28 @@ export default function App() {
     return () => _unsubscribe();
   }, []);
 
-  setStringValue = async () => {
+  const setStringValue = async () => {
     try {
-      this.setState({ token: 'abc123' })
-      await AsyncStorage.setItem('token', abc123);
+      await AsyncStorage.setItem('Accelerometer', _value);
     } catch(e) {
       setErrorMsg(`Storage Error`);
     }
     console.log('Done.')
   }
 
-  getMyStringValue = async () => {
+  const getMyStringValue = async () => {
     try {
-      return await AsyncStorage.getItem('token')
+      let _value = await AsyncStorage.getItem('Accelerometer')
+      if (_value != null)
+        setValue(_value);
     } catch(e) {
       setErrorMsg(`Stored Error`);
-    }
-    console.log('Done.')
+    } console.log('Done.')
   }
 
-  //multiSet = async () => {
-  //  const firstPair = ["Accelerometer", "value_1"]
-  //  const secondPair = ["Gyroscope", "value_2"]
-  //  try {
-  //    await AsyncStorage.multiSet([firstPair, secondPair])
-  //  } catch(e) {
-  //    setErrorMsg(`Storage Error`);
-  //  }
-  //  console.log("Done.")
-  //}
+  useEffect(() => {
+    getMyStringValue();
+  }, []);
 
   const { x, y, z } = data;
   return (
@@ -86,6 +80,9 @@ export default function App() {
         </TouchableOpacity>
         <TouchableOpacity onPress={_fast} style={styles.button}>
           <Text>Fast</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.saveButton} onPress={() => setStringValue()}>
+          <Text style = {{ color: "white" }}>Save Value</Text>
         </TouchableOpacity>
       </SafeAreaView>
     </SafeAreaView>
@@ -125,4 +122,16 @@ const styles = StyleSheet.create({
     borderRightWidth: 1,
     borderColor: '#ccc',
   },
+  saveButton: {
+    backgroundColor: '#eee',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'stretch',
+    paddingVertical: 12,
+    paddingHorizontal: 32,
+    marginTop: 32,
+    marginHorizontal: 32,
+    borderRadius: 6,
+  },
+
 });
